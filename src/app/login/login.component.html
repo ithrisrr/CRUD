@@ -1,0 +1,104 @@
+<div class="background_container">
+
+    <div class="login_container" *ngIf="showPage=='login'">
+      <div class="tittle">CRUD OPERATIONS</div>
+  
+      <div style="display: flex;flex-direction: column;margin-top: 25px;gap: 5px;">
+        <div style="color: #000;font-size: 18px;font-weight: 600;">LOGIN</div>
+        <div style="color: #6C6C6C;font-size: 14px;font-weight: 400;">Enter your credentials to access your account</div>
+      </div>
+  
+      <div class="login_inputs">
+  
+        <div style="display: flex;flex-direction: column;gap: 5px;">
+          <div style="color: #6C6C6C;font-size: 14px;">Email</div>
+          <div>
+            <input type="email" placeholder="Enter your email" [(ngModel)]="email_id" (blur)="validateEmail()">
+          </div>
+        </div>
+  
+        <div style="display: flex;flex-direction: column;gap: 5px;">
+          <div style="color: #6C6C6C;font-size: 14px;">Password</div>
+          <div>
+            <input type="password" placeholder="Enter your password" id="myInput" [(ngModel)]="pass_word">
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;font-size: 14px;color: #6C6C6C;">
+          <div><input type="checkbox" (change)="showPassword($event)" style="width: 15px;height: 15px;"></div>
+          <div>Show Password</div>
+        </div>
+  
+        <div class="login_btn" (click)="login()">LOGIN</div>
+
+        <div *ngIf="incorrect_password" style="color: red;font-size: 11px;margin: auto;">
+          <span>{{password_error}}</span>
+        </div>
+  
+        <div class="register_link">Don't have a account?  <a (click)="navigatetoRegister()">Register</a></div>
+  
+      </div>
+
+    </div>
+
+    <div class="signup_container" *ngIf="showPage=='register'">
+
+      <div class="tittle">SIGN UP</div>
+
+      <!-- <div style="display: flex;flex-direction: column;margin-top: 10px;gap: 5px;">
+        <div style="color: #000;font-size: 18px;font-weight: 600;">REGISTER</div>
+        <div style="color: #6C6C6C;font-size: 14px;font-weight: 400;">Enter your details to register your account</div>
+      </div> -->
+
+      <div class="signup_inputs">
+  
+        <!-- <div style="display: flex;flex-direction: column;gap: 5px;">
+          <div style="color: #6C6C6C;font-size: 14px;">Name</div>
+          <div>
+            <input type="text" placeholder="Enter your name" [(ngModel)]="user_name">
+          </div>
+        </div> -->
+  
+        <div style="display: flex;flex-direction: column;gap: 5px;">
+          <div style="color: #6C6C6C;font-size: 14px;">Email</div>
+          <div  [ngClass]="{'email_alert': duplicateEmail}">
+            <input type="email" placeholder="Enter your email" (blur)="validateNewEmail()" [(ngModel)]="new_email">
+          </div>
+        </div>
+
+        <div style="display: flex;flex-direction: column;gap: 5px;">
+            <div style="color: #6C6C6C;font-size: 14px;">Password</div>
+            <div [ngClass]="{'password_mismatch' : password_mismatch}">
+              <input type="password" placeholder="Enter your password" id="newPassword" [(ngModel)]="new_password">
+            </div>
+        </div>
+
+        <div style="display: flex;flex-direction: column;gap: 5px;">
+            <div style="color: #6C6C6C;font-size: 14px;">Confirm Password</div>
+            <div  [ngClass]="{'password_mismatch' : password_mismatch}">
+              <input type="password" placeholder="Re-enter your password" id="confirmNewPassword" (blur)="checkPassword()" [(ngModel)]="confirm_newpassword">
+            </div>
+        </div>
+
+        <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;font-size: 14px;color: #6C6C6C;">
+          <div><input type="checkbox" (change)="showNewPassword($event)" style="width: 15px;height: 15px;"></div>
+          <div>Show Password</div>
+        </div>
+
+        <div *ngIf="password_mismatch" style="color: red;font-size: 11px;">
+          <span>Password doesn't match</span>
+        </div>
+
+        <div *ngIf="duplicateEmail" ngClass="duplicateEmail ? " style="color: red;font-size: 11px;margin: auto;">
+          <span>Email Already Existed</span>
+        </div>
+  
+        <div class="login_btn" (click)="signupUser()">SIGN UP</div>
+  
+        <div class="backtologin" (click)="backtoLgin()">Back to  <a>Login</a></div>
+  
+      </div>
+
+    </div>
+
+  </div>

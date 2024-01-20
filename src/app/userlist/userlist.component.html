@@ -1,0 +1,161 @@
+<div class="container">
+
+    <div style="display: flex;justify-content: space-between;width: 90%;">
+        <div style="display: flex;justify-content: center;align-items: center;">
+            <div [popover]="myPopover" popoverPlacement="right" [popoverOnHover]="false"><img src="../../assets/images/user.svg"></div>
+            <popover-content #myPopover 
+                [animation]="true"
+                [closeOnClickOutside]="true"
+                >
+                <div style="width: 100px;height: 80px;display: flex;flex-direction: column;gap: 10px;">
+                  <div><img src="../../assets/images/man-user.svg" style="width: 20px;height: 20px;"></div>
+                  <div>{{email_id}}</div>
+                  <!-- <div>{{access_level}}</div> -->
+                  <div (click)="logout()" style="width: 20px;height: 20px;cursor: pointer;display: flex;flex-direction: row;justify-content: space-between;gap: 40px;">
+                    <div>Logout</div>
+                    <div><img style="width: 20px;height: 20px;" src="../../assets/images/logout-svgrepo-com.svg"></div>
+                  </div>
+                </div>
+            </popover-content>
+        </div>
+        <div style="font-size: 22px;color: #6C6C6C;">Users</div>
+        <!-- [ngClass]="{'adduser_btn': access_level !== 'Admin'} -->
+        <div style="height:30px;width: 90px;background-color: blue;border-radius: 10px;display: flex;justify-content: center;align-items: center;cursor: pointer;">
+            <div style="font-size: 14px;color: #FFF;" data-toggle="modal" data-target="#myModal">Add User</div>
+        </div>
+    </div>
+
+    <div class="list_container">
+      <ng-container *ngIf="userList.length !== 0; else noUsers">
+        <table class="table table-bordered">
+         <thead>
+            <tr>
+                <th scope="col">S.No</th>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Role</th>
+                <th scope="col">Edit</th>
+                <th scope="col">Delete</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr *ngFor="let user of userList; let i=index">
+                <td>{{i+1}}</td>
+                <td>{{user.user_name}}</td>
+                <td>{{user.user_email}}</td>
+                <td>{{user.user_role}}</td>
+                <td>
+                    <button class="btn btn-primary btn-md" data-target="#editModal" data-toggle="modal" (click)="editUser(user)">Edit</button>
+                    <popover-content  #editPopover [closeOnClickOutside]="true" [closeOnMouseOutside]="false">
+                       <div style="position: fixed;width: 600px;height: 400px;">
+                          Hey there!
+                       </div>
+                    </popover-content>
+                </td>
+
+                <td><button class="btn btn-danger btn-md p-5" (click)="deleteUser(user._id)">Delete</button></td>
+            </tr>
+         </tbody>
+        </table>
+      </ng-container>
+
+      <ng-template #noUsers>
+        <div class="no-users-message">No Users</div>
+      </ng-template>
+    </div>
+
+    <!--Edit  Modal -->
+    <div id="editModal" class="modal fade" role="dialog" style="top: 50%; left: 50%; transform: translate(-50%, -50%); height: 500px;">
+        <div class="modal-dialog">
+          <!-- Modal content -->
+          <div class="modal-content" style="padding: 25px;">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+              <h4 class="modal-title">Edit User</h4>
+            </div>
+            <div class="modal-body" style="display: flex; align-items: center;">
+              <div class="register_inputs">
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div style="color: #6C6C6C; font-size: 14px;">Name</div>
+                  <div>
+                    <input type="text" placeholder="Enter your name" [(ngModel)]="user_name">
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div style="color: #6C6C6C; font-size: 14px;">Email</div>
+                  <div>
+                    <input type="email" placeholder="Enter your email" [(ngModel)]="user_email">
+                  </div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                  <div style="color: #6C6C6C; font-size: 14px;">Role</div>
+                  <div>
+                    <input type="text" placeholder="Enter your Designation" [(ngModel)]="user_role">
+                  </div>
+                </div>
+                <div (click)="updateUser()" data-dismiss="modal" data-toggle="modal" style="width: 50px; height: 28px; margin-bottom: 20px; background-color: gray; cursor: pointer; border-radius: 3px; color: #FFF; display: flex; justify-content: center; align-items: center;">
+                  <div style="font-size: 13px;">Update</div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <div (click)="clearInputs()" data-dismiss="modal" style="width: 50px; height: 28px; margin-top: 20px; margin-left: auto; background-color: gray; cursor: pointer; border-radius: 3px; color: #FFF; display: flex; justify-content: center; align-items: center;">
+                <div style="font-size: 13px;">Close</div>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog" style=" top: 50%; left: 50%; transform: translate(-50%, -50%);height: 500px;">
+        <div class="modal-dialog">
+    
+        <!-- Modal content-->
+        <div class="modal-content" style="padding: 25px;">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4 class="modal-title">Add New User</h4>
+            </div>
+            <div class="modal-body" style="display: flex;align-items: center;">
+                <div class="register_inputs">
+  
+                    <div style="display: flex;flex-direction: column;gap: 5px;">
+                      <div style="color: #6C6C6C;font-size: 14px;">Name</div>
+                      <div>
+                        <input type="text" placeholder="Enter your name" [(ngModel)]="user_name">
+                      </div>
+                    </div>
+              
+                    <div style="display: flex;flex-direction: column;gap: 5px;">
+                      <div style="color: #6C6C6C;font-size: 14px;">Email</div>
+                      <div>
+                        <input type="email" placeholder="Enter your email" [(ngModel)]="user_email">
+                      </div>
+                    </div>
+            
+                    <div style="display: flex;flex-direction: column;gap: 5px;">
+                        <div style="color: #6C6C6C;font-size: 14px;">Role</div>
+                        <div>
+                          <input type="text" placeholder="Enter your Designation" [(ngModel)]="user_role">
+                        </div>
+                    </div>
+        
+                    <div data-dismiss="modal" (click)="addUser()" style="width: 50px;height: 28px;margin-bottom: 20px;background-color: gray;cursor: pointer;border-radius: 3px;color: #FFF;display: flex;justify-content: center;align-items: center;">
+                      <div style="font-size: 13px;">Add</div>
+                    </div>
+                            
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div data-dismiss="modal" data-target="myModal" (click)="clearInputs()" style="width: 50px;height: 28px;margin-top: 20px;margin-left: auto;background-color: gray;cursor: pointer;border-radius: 3px;color: #FFF;display: flex;justify-content: center;align-items: center;">
+                    <div style="font-size: 13px;">Close</div>
+                </div>            
+            </div>
+        </div>
+    
+        </div>
+    </div>
+  
+
+</div>
